@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о сотрудниках</title>
+    {% extends "base.html" %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+    <link rel = "stylesheet" type = "text/css" href="{% static 'show_info.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+</head>
+<body>
+    {% block content %}
+        <div class="container d-flex">
+            <div class="my-auto d-grid gap-2">
+                {% for focus in focuses %}
+                    <a href="{% url 'employee_ofFocus' focus.focus_name %}" class="btn btn-primary" type="button">{{ focus.focus_name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endblock %}
+</body>
+</html>

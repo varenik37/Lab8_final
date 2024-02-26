@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование задачи</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load crispy_forms_tags %}
+    {% load static %}
+    <link rel = "stylesheet" type = "text/css" href="{% static 'show_info.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <style>
+        .form
+        {
+            border: hotpink solid 1px;
+            border-radius: 100px;
+            margin-top: 5%;
+        }
+        button
+        {
+            position: relative;
+            left: 50%;
+            transform: translate(-50%);
+        }
+    </style>
+</head>
+<body style="height: 100vh">
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous">
+</script>
+    <div class="d-flex flex-column min-vh-100 min-vw-100">
+        <div class="d-flex flex-grow-5 justify-content-center align-items-center">
+            <div class="form p-5 w-40 shadow">
+                {{ form.media }}
+                <form method="post">
+                    {% csrf_token %}
+                    <h1 class="display-5">Редактирование задачи</h1>
+                    {% csrf_token %}
+                    <table>
+                        {{ form.number|as_crispy_field }}
+                        {{ form.salary|as_crispy_field }}
+                        {{ form.date_control|as_crispy_field }}
+                        {{ form.focus|as_crispy_field }}
+                    </table>
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>                </form>
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о сотруднике</title>
+    {% extends "base.html" %}
+    {% load static %}
+    <link rel = "stylesheet" type = "text/css" href="{% static 'show_info.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+
+</head>
+<body>
+{% block content %}
+    <main class="container">
+      <div class="card">
+          <img src={% static 'images/img.jpg' %} class="card__image" />
+        <div class="card__text">
+          {{ employee.first_name }} {{ employee.last_name }}
+          <p>Я больной я не ручаюсь за себя бябябябябябя я слышу голоса в своей голове</p> <br>
+            <a href="{% url 'form' focus_name id_group employee.id_user_id %}" type="button" class="btn btn-primary">Отправить</a>
+
+        </div>
+        <ul class="card__info">
+          <li>
+            <span class="card__info__stats">12</span>
+            <span>выполненные задачи</span> <i class="bi bi-check-lg"></i>
+          </li>
+          <li>
+            <span class="card__info__stats">60000</span>
+            <span>зарплата</span> <i class="bi bi-currency-dollar"></i>
+          </li>
+        </ul>
+          {% if assignments|length > 0 %}
+          <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Номер работы</th>
+                  <th scope="col">Направленность</th>
+                  <th scope="col">Оплачено</th>
+                  <th scope="col">Дата сдачи</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for assignment in assignments %}
+                <tr>
+                  <th scope="row">{{ assignment.number }}</th>
+                  <td>{{ assignment.focus.focus_name }}</td>
+                  <td>{{ assignment.salary }}</td>
+                  <td>{{ assignment.date_control }}</td>
+                  <td><a href="{% url 'editForm' id_user=employee.id pk=assignment.pk %}" class="btn btn-warning">Изменить</a>
+                      <a href="{% url 'delete_assignment' focus_name id_group employee.id_user_id assignment.number %}" class="btn btn-danger">Удалить</a>
+                  </td>
+
+                </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+          {% endif %}
+      </div>
+</main>
+{% endblock %}
+</body>
+</html>
+
+

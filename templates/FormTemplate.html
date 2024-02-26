@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment Form</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load crispy_forms_tags %}
+    {% load static %}
+    <link rel = "stylesheet" type = "text/css" href="{% static 'show_info.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+
+    <style>
+        .form
+        {
+            border: hotpink solid 1px;
+            border-radius: 100px;
+            margin-top: 5%;
+        }
+        button
+        {
+            position: relative;
+            left: 50%;
+            transform: translate(-50%);
+        }
+    </style>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous">
+</script>
+    <div class="d-flex flex-column min-vh-100 min-vw-100">
+        <div class="d-flex flex-grow-5 justify-content-center align-items-center">
+            <div class="form p-5 w-40 shadow">
+                {{ form.media }}
+                <form method="post">
+                    <h1 class="display-5">Добавить задачу</h1>
+                    {% csrf_token %}
+                    <table>
+                        {{ form.number|as_crispy_field }}
+                        {{ form.salary|as_crispy_field }}
+                        {{ form.date_control|as_crispy_field }}
+                        {{ form.focus|as_crispy_field }}
+                    </table>
+                    <button id = "ass_button" class="btn btn-success d-flex" type="submit">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% block javascript %}
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#id_number').keyup(function () {
+                    $.ajax({
+                        data: $(this).serialize(),
+                        url: "{% url 'check_numberAssignment' focus_name id_employee %}",
+                        success:
+                            function (response) {
+                            if (!$('#numberError').length)
+                                $('#id_number').after('<div class="invalid-feedback d-block" ' +
+                                    'id = "numberError"></div>');
+                            if (response.exist == true) {
+                                $('#id_number').removeClass('is-valid').addClass('is-invalid');
+                                $('#numberError').removeClass('valid-feedback').addClass('invalid-feedback').text("Задача с таким номером уже есть");
+                                $('#ass_button').prop('disabled', true);
+                            } else {
+                                $('#id_number').removeClass('is-invalid').addClass('is-valid');
+                                $('#numberError').removeClass('invalid-feedback').addClass('valid-feedback').text("Задачи с таким номером нет");
+                                $('#ass_button').prop('disabled', false);
+                            }
+                            },
+                        error: function (response) {
+                            console.log(response.responseJSON.errors);
+                        }
+                    });
+                    return false;
+                });
+            });
+        </script>
+    {% endblock javascript %}
+</body>
+</html>

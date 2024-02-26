@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Сотрудники</title>
+    {% extends "base.html" %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+    {% load test_tag %}
+    <link rel = "stylesheet" type = "text/css" href="{% static 'show_info.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+</head>
+<body>
+    {% block content %}
+         <div class="container d-flex">
+            <div class="my-auto d-grid gap-2">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">ФИО</th>
+                      <th scope="col">Последняя задача</th>
+                      <th scope="col">Общая зарплата</th>
+                      <th scope="col">Действие</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-group-divider">
+                  {% for employee, sumSalary, lastAssignment in employees  %}
+                      {% if sumSalary >= 40000 %}
+                        <tr class="bg-success">
+                      {% elif sumSalary >= 20000 %}
+                        <tr class="bg-warning">
+                      {% else %}
+                        <tr>
+                      {% endif %}
+                      <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                      {% with tmp=0 %}
+                      <td> {{ lastAssignment }}</td>
+                      <td>{{ sumSalary }}</td>
+                       {% endwith %}
+                  <td><a href="{% url 'show_employee' focus_name id_group employee.id_user.id %}" class="btn btn-info">Подробнее</a></td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+         </div>
+    {% endblock %}
+</body>
+</html>
